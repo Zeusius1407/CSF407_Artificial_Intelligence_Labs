@@ -1,0 +1,82 @@
+
+======================================================================
+Task 3 - Tests
+======================================================================
+Test 1 (original warehouse)
+A*                     found=True   length=40     expanded=64
+#################
+#S****#*********#
+#.###*#*#######*#
+#...#*#*******#*#
+###.#*#######*#*#
+#...#*********#*#
+#.###########.#*#
+#.............#G#
+#################
+
+Test 2 (trivial)
+A*                     found=True   length=1      expanded=2
+
+Test 3 (no solution)
+A*                     found=False  length=None   expanded=9
+
+Test 4 (alternative paths) - shortest is 6
+A*                     found=True   length=6      expanded=7
+#########
+#S*****G#
+#.#####.#
+#.......#
+#########
+
+======================================================================
+Task 5 - BFS vs A* on the warehouse map
+======================================================================
+Measure                BFS      A*
+Solution found        True    True
+Path length             40      40
+States expanded         64      64
+Free cells in map: 64
+
+======================================================================
+Task 6 - Heuristic investigation (warehouse map)
+======================================================================
+(BFS optimal length = 40)
+heuristic       found  length  expanded  optimal?
+zero             True      40        64      True
+manhattan        True      40        64      True
+euclidean        True      40        64      True
+2xmanhattan      True      40        64      True
+
+======================================================================
+Task 6 - Heuristic investigation (open-room map)
+======================================================================
+(BFS optimal length = 18)
+heuristic       found  length  expanded  optimal?
+zero             True      18        72      True
+manhattan        True      18        47      True
+euclidean        True      18        55      True
+2xmanhattan      True      20        33     False
+
+Path with 2x Manhattan:
+###############
+#S#.#.....#...#
+#*#..#........#
+#**.......###.#
+##*##.....***.#
+#.*********#*.#
+#.#....#..#.*##
+#...#..#...#*G#
+###############
+
+Path with Manhattan:
+###############
+#S#.#.....#...#
+#*#..#........#
+#*****....###.#
+##.##********.#
+#..........#*.#
+#.#....#..#.*##
+#...#..#...#*G#
+###############
+
+All assertions passed.

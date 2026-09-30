@@ -1,0 +1,7 @@
+pgmpy>=1.1
+pandas
+numpy
+matplotlib
+# optional, only for LLM_BACKEND = "qwen"
+# transformers>=4.45
+# accelerate

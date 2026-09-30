@@ -1,0 +1,56 @@
+=== Task 0: applicability in the initial state ===
+  Move(A,B)            applicable=True
+  Move(B,A)            applicable=False
+  Move(B,C)            applicable=False
+  Move(C,B)            applicable=False
+  PickUp(Package,A)    applicable=True
+  Drop(Package,A)      applicable=False
+  PickUp(Package,B)    applicable=False
+  Drop(Package,B)      applicable=False
+  PickUp(Package,C)    applicable=False
+  Drop(Package,C)      applicable=False
+
+=== Task 1: checking the example sequence from the handout ===
+  Move(A,B), PickUp(Package,B), Move(B,C), Drop(Package,C) -> step 2 PickUp(Package,B): preconditions not satisfied, missing {'At(Package,B)'}
+  PickUp(Package,A), Move(A,B), Move(B,C), Drop(Package,C) -> valid
+
+=== Test A: solvable ===
+Initial: {At(Package,A), At(Robot,A)}
+Goal   : {At(Package,C)}
+Plan   : PickUp(Package,A), Move(A,B), Move(B,C), Drop(Package,C)
+  S0                               {At(Package,A), At(Robot,A)}
+  S1 (after PickUp(Package,A))     {At(Robot,A), Holding(Package)}
+  S2 (after Move(A,B))             {At(Robot,B), Holding(Package)}
+  S3 (after Move(B,C))             {At(Robot,C), Holding(Package)}
+  S4 (after Drop(Package,C))       {At(Package,C), At(Robot,C)}
+Independent validation: valid
+
+=== Test B: PickUp removed ===
+Initial: {At(Package,A), At(Robot,A)}
+Goal   : {At(Package,C)}
+No plan found
+
+=== Test C: irrelevant/robot-only actions ===
+Initial: {At(Package,A), At(Robot,A)}
+Goal   : {At(Package,C)}
+Plan   : PickUp(Package,A), Move(A,C), Drop(Package,C)
+  S0                               {At(Package,A), At(Robot,A)}
+  S1 (after PickUp(Package,A))     {At(Robot,A), Holding(Package)}
+  S2 (after Move(A,C))             {At(Robot,C), Holding(Package)}
+  S3 (after Drop(Package,C))       {At(Package,C), At(Robot,C)}
+Independent validation: valid
+  (For contrast, goal At(Robot,C) gives: ['Move(A,C)'] )
+
+=== Test C2: Drop removed (robot can reach C, package cannot) ===
+Initial: {At(Package,A), At(Robot,A)}
+Goal   : {At(Package,C)}
+No plan found
+
+=== Extra: goal already satisfied ===
+Initial: {At(Package,C), At(Robot,A)}
+Goal   : {At(Package,C)}
+Plan   : 
+  S0                               {At(Package,C), At(Robot,A)}
+Independent validation: valid
+
+All tests passed.

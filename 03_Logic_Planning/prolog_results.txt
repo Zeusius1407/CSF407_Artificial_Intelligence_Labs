@@ -1,0 +1,18 @@
+== Task 6 ==
+can_move(a,b)                                                true
+can_move(a,c)                                                false
+== Task 7 ==
+valid_move(a,b)                                              true
+valid_move(b,c)                                              true
+valid_move(a,c)                                              false
+Challenge: proposed Move(a,c)
+valid_move(a,c)                                              false
+== Extension: whole-plan verification ==
+achieves_goal([pickup(a),move(a,b),move(b,c),drop(c)])       true
+achieves_goal([move(a,b),pickup(b),move(b,c),drop(c)])       false
+achieves_goal([pickup(a),move(a,c),drop(c)])                 false
+achieves_goal([pickup(a),move(a,b),move(b,c)])               false
+Plans of length 4 Prolog can find itself:
+  [pickup(a),move(a,b),move(b,c),drop(c)]
+== Task 8 ==
+reduce_speed                                                 true

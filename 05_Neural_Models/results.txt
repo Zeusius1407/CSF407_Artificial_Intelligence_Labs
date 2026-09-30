@@ -1,0 +1,108 @@
+
+========================================================================
+Task 1 - Linear baseline: a single affine map + sigmoid
+========================================================================
+  final loss 0.6931   (ln 2 = 0.6931)
+  probabilities: [0.4999988079071045, 0.49999773502349854, 0.499997615814209, 0.49999648332595825]
+  weights: [[-4.909776635031449e-06, -4.422634901857236e-06]]  bias: [-4.699390501627931e-06]
+  -> the best a linear boundary can do is output ~0.5 everywhere.
+
+========================================================================
+Task 3/4A - 2-2-1 network, hidden=tanh, BCEWithLogitsLoss, seed=0
+========================================================================
+    step     0  loss 0.7152
+    step   500  loss 0.0009
+    step  1000  loss 0.0003
+    step  1500  loss 0.0001
+    step  2000  loss 0.0001
+    step  2500  loss 0.0001
+  initial loss 0.7152  ->  final loss 0.000038
+  x=[0.0, 0.0]  p(y=1)=0.0000  label=0  target=0
+  x=[0.0, 1.0]  p(y=1)=1.0000  label=1  target=1
+  x=[1.0, 0.0]  p(y=1)=0.9999  label=1  target=1
+  x=[1.0, 1.0]  p(y=1)=0.0000  label=0  target=0
+  4/4 correct
+  learned hidden representation h1 (rows = inputs):
+   [[-0.9903591275215149, -0.9819700121879578], [0.9917423725128174, -0.9999993443489075], [-0.9999998211860657, 0.9888001084327698], [-0.9917954802513123, -0.9872791767120361]]
+
+========================================================================
+Task 4B - Backpropagation check
+========================================================================
+  dL/dW1 from autograd (full batch, mean loss):
+   [[0.0005053991917520761, 0.0006069490918889642], [-0.04256903752684593, -0.044772919267416]]
+  average of the 4 per-example gradients:
+   [[0.0005053991917520761, 0.0006069490918889642], [-0.04256903752684593, -0.044772919267416]]
+  max |difference| = 0.0
+  hand-derived chain rule dL/dW1:
+   [[0.0005053991917520761, 0.0006069490918889642], [-0.04256903752684593, -0.044772919267416]]
+  max |autograd - manual| = 0.0
+  finite-difference dL/dW1:
+   [[0.0005053991917520761, 0.0006069490918889642], [-0.042569007724523544, -0.044772882014513016]]
+  max |autograd - finite diff| = 3.725290298461914e-08
+
+========================================================================
+Task 4C - Symmetry: identical initial weights
+========================================================================
+
+  hidden=tanh, all weights and biases = 0.0
+    step    0  W1 row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True  loss=0.6931
+    step    1  W1 row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True  loss=0.6931
+    step    2  W1 row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True  loss=0.6931
+    step   10  W1 row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True  loss=0.6931
+    step 2000  W1 row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True  loss=0.6931
+    final probabilities: [0.5, 0.5, 0.5, 0.5]
+
+  hidden=sigmoid, all weights and biases = 0.0
+    step    0  W1 row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True  loss=0.6931
+    step    1  W1 row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True  loss=0.6931
+    step    2  W1 row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True  loss=0.6931
+    step   10  W1 row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True  loss=0.6931
+    step 2000  W1 row0=[0.0, 0.0]  row1=[0.0, 0.0]  identical=True  loss=0.6931
+    final probabilities: [0.5, 0.5, 0.5, 0.5]
+
+  hidden=tanh, all weights and biases = 0.5
+    step    0  W1 row0=[0.5, 0.5]  row1=[0.5, 0.5]  identical=True  loss=0.8522
+    step    1  W1 row0=[0.49672380089759827, 0.49672380089759827]  row1=[0.49672380089759827, 0.49672380089759827]  identical=True  loss=0.7861
+    step    2  W1 row0=[0.4954908788204193, 0.4954908788204193]  row1=[0.4954908788204193, 0.4954908788204193]  identical=True  loss=0.7457
+    step   10  W1 row0=[0.5087128281593323, 0.5087128281593323]  row1=[0.5087128281593323, 0.5087128281593323]  identical=True  loss=0.6884
+    step 2000  W1 row0=[3.9763455390930176, 3.9763455390930176]  row1=[3.9763455390930176, 3.9763455390930176]  identical=True  loss=0.4796
+    final probabilities: [0.003, 0.666, 0.666, 0.668]
+
+========================================================================
+Task 4D - Activation experiment (same seed=0, same initial weights)
+========================================================================
+  activation  final loss  correct   ||grad W1|| step0    step10  dead ReLUs@init
+  sigmoid        0.47740      3/4             0.00089   0.00090                0
+  tanh           0.00004      4/4             0.06178   0.03976                0
+  relu           0.69315      2/4             0.00170   0.00000                0
+
+  Robustness over 20 seeds, 2 hidden units (3000 Adam steps, lr=0.1):
+    sigmoid  solved  9/20   median final loss 0.3466   worst 0.4774
+    tanh     solved  7/20   median final loss 0.3466   worst 0.4776
+    relu     solved  5/20   median final loss 0.4774   worst 0.6931
+
+  Robustness over 20 seeds, 4 hidden units (3000 Adam steps, lr=0.1):
+    sigmoid  solved 18/20   median final loss 0.0001   worst 0.3466
+    tanh     solved 19/20   median final loss 0.0000   worst 0.3466
+    relu     solved 11/20   median final loss 0.0000   worst 0.6931
+
+========================================================================
+Task 5 - Three-class extension: 3 logits + softmax cross-entropy
+========================================================================
+  final weight matrix W2 shape: (3, 2)  bias: (3,)
+  logits per batch: (4, 3) -> 3 logits per example
+  final loss 0.00001
+  x=[0.0, 0.0]  p=[1.0, 0.0, 0.0]  argmax=0  target=0
+  x=[0.0, 1.0]  p=[0.0, 1.0, 0.0]  argmax=1  target=1
+  x=[1.0, 0.0]  p=[0.0, 1.0, 0.0]  argmax=1  target=1
+  x=[1.0, 1.0]  p=[0.0, 0.0, 1.0]  argmax=2  target=2
+  sum of probabilities for x=[0,1]: 1.0
+  dL/dlogits (autograd): [-1.7523765563964844e-05, 1.7465081327827647e-05, 2.687619016228382e-10]
+  p - y (formula)      : [-1.7523765563964844e-05, 1.7465075870859437e-05, 2.6876181835611135e-10]
+  max |difference| over all examples: 5.4569682106375694e-12
+
+  softmax(z)       = [8.326762326760218e-06, 0.9999890327453613, 2.6256500404997496e-06]
+  softmax(z + 100) = [8.326786883117165e-06, 0.9999890327453613, 2.62564253716846e-06]
+  max diff: 2.4556356947869062e-11
+  naive  softmax(z + 1000) = [nan, nan, nan]  <- exp overflows to inf, inf/inf = nan
+  stable softmax(z + 1000) = [8.326595889229793e-06, 0.9999890327453613, 2.625682554935338e-06]
